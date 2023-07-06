@@ -16,3 +16,18 @@ model Benutzer {
   surname   String
   telephone String
 }
+
+model User {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  username String
+  password String
+}
+
+model Recipe {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  description  String
+  ingredients  String
+  instructions String
+  image        String // ???
+}
