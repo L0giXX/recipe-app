@@ -18,7 +18,7 @@ export async function POST(request: Request) {
   }
   const match = await bcrypt.compare(password, user.password);
   if (!match) {
-    return NextResponse.json({ error: "Password incorrect" }, { status: 401 });
+    return NextResponse.json({ error: "Password incorrect" }, { status: 303 });
   }
-  return NextResponse.redirect("http://localhost:3000", { status: 200 });
+  NextResponse.redirect("http://localhost:3000");
 }
