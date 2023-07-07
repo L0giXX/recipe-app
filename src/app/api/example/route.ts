@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import prisma from "../../../../utils/prisma";
+import prisma from "../../../utils/prisma";
 
 export async function GET() {
   const data = await prisma.benutzer.findMany();
@@ -53,4 +53,3 @@ export async function PUT(request: Request) {
   });
   return NextResponse.json(benutzer);
 }
-//test
