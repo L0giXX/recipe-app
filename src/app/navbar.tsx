@@ -1,6 +1,10 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useCookies } from "react-cookie";
 function Navbar() {
+  const [cookies, setCookie] = useCookies(["access_token"]);
+
   return (
     <nav className="bg-gray-900 border-gray-200 py-6  ">
       <div className="container flex items-center mx-auto justify-center">
@@ -15,7 +19,11 @@ function Navbar() {
             <Link href="/saved-recipes">Saved Recipe</Link>
           </li>
           <li className="mx-20">
-            <Link href="/auth">Login/Register</Link>
+            {!cookies.access_token ? (
+              <Link href="/auth">Login/Register</Link>
+            ) : (
+              <button>Logout</button>
+            )}
           </li>
         </ul>
       </div>

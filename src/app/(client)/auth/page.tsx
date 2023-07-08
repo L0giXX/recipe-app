@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useCookies } from "react-cookie";
 
 export default function LoginRegister() {
   return (
@@ -15,7 +16,7 @@ const Login = () => {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
+  const [cookies, setCookie] = useCookies(["access_token"]);
   async function loginHandler(e: any) {
     e.preventDefault();
     try {
@@ -29,7 +30,9 @@ const Login = () => {
         alert(`Unable to login, reason: ${data.error}`);
         return;
       }
-      router.replace("/");
+      const token = await res.text();
+      setCookie("access_token", token, { path: "/", maxAge: 60 * 60 });
+      router.push("/");
     } catch (err: any) {
       alert(`Unable to login, reason: ${err.message}`);
     }
@@ -90,15 +93,22 @@ const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  async function registerHandler() {
-    const data = { username: username, password: password };
-    await fetch("http://localhost:3000/api/user/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((res) => console.log(res));
+  async function registerHandler(e: any) {
+    e.preventDefault();
+    try {
+      const res = await fetch("http://localhost:3000/api/user/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        alert(`Unable to sign up, reason: ${data.error}`);
+        return;
+      }
+    } catch (err: any) {
+      alert(`Unable to sign up, reason: ${err.message}`);
+    }
   }
 
   return (

@@ -24,5 +24,8 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   }
-  return NextResponse.json({ error: "User not found" }, { status: 404 });
+  return NextResponse.json(
+    { error: "Username already in use" },
+    { status: 404 }
+  );
 }
