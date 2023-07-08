@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginRegister() {
   return (
@@ -11,18 +12,27 @@ export default function LoginRegister() {
 }
 
 const Login = () => {
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  async function loginHandler() {
-    const data = { username: username, password: password };
-    await fetch("http://localhost:3000/api/user/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    })
-      .then((res) => res.json())
-      .then((res) => console.log(res));
+  async function loginHandler(e: any) {
+    e.preventDefault();
+    try {
+      const res = await fetch("http://localhost:3000/api/user/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        alert(`Unable to login, reason: ${data.error}`);
+        return;
+      }
+      router.replace("/");
+    } catch (err: any) {
+      alert(`Unable to login, reason: ${err.message}`);
+    }
   }
 
   return (
