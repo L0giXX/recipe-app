@@ -3,7 +3,11 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useCookies } from "react-cookie";
 function Navbar() {
-  const [cookies, setCookie] = useCookies(["access_token"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["access_token"]);
+
+  function logoutHandler() {
+    removeCookie("access_token");
+  }
 
   return (
     <nav className="bg-gray-900 border-gray-200 py-6  ">
@@ -22,7 +26,7 @@ function Navbar() {
             {!cookies.access_token ? (
               <Link href="/auth">Login/Register</Link>
             ) : (
-              <button>Logout</button>
+              <button onClick={logoutHandler}>Logout</button>
             )}
           </li>
         </ul>
