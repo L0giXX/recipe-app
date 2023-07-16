@@ -19,5 +19,6 @@ model Recipe {
   description  String
   ingredients  String
   instructions String
+  cookTime     Int
   image        String
 }

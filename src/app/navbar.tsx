@@ -4,10 +4,19 @@ import Link from "next/link";
 import { useCookies } from "react-cookie";
 function Navbar() {
   const [cookies, setCookie, removeCookie] = useCookies(["access_token"]);
+  const [isClient, setIsClient] = useState(false);
 
   function logoutHandler() {
     removeCookie("access_token");
   }
+
+  useEffect(() => {
+    if (cookies.access_token) {
+      setIsClient(true);
+    } else {
+      setIsClient(false);
+    }
+  }, [cookies.access_token]);
 
   return (
     <nav className="bg-gray-900 border-gray-200 py-6  ">
@@ -23,10 +32,12 @@ function Navbar() {
             <Link href="/saved-recipes">Saved Recipe</Link>
           </li>
           <li className="mx-20">
-            {!cookies.access_token ? (
+            {!isClient ? (
               <Link href="/auth">Login/Register</Link>
             ) : (
-              <button onClick={logoutHandler}>Logout</button>
+              <Link href="/" onClick={logoutHandler}>
+                Logout
+              </Link>
             )}
           </li>
         </ul>
