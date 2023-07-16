@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ReactHTMLElement } from "react";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
 import { set } from "zod";
@@ -40,6 +40,12 @@ function CreateRecipe() {
     const instructions = recipe.instructions;
     instructions[index] = value;
     setRecipe({ ...recipe, instructions });
+  }
+  // TODO: Image upload ändern (statt Bild, URL eingeben)
+  function handleChangeImage(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!e.target.files) return;
+    const file = URL.createObjectURL(e.target.files[0]);
+    setRecipe({ ...recipe, image: file });
   }
 
   function addIngredient() {
@@ -175,7 +181,7 @@ function CreateRecipe() {
               type="file"
               accept="image/*"
               placeholder="Image"
-              onChange={handleChange}
+              onChange={handleChangeImage}
               required
             />
           </div>
