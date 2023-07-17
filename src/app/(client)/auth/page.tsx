@@ -31,7 +31,7 @@ const Login = () => {
         return;
       }
       const token = await res.text();
-      setCookie("access_token", token, { path: "/", maxAge: 60 * 60 });
+      setCookie("access_token", token, { path: "/", maxAge: 60 * 60 * 24 });
       router.push("/");
     } catch (err: any) {
       alert(`Unable to login, reason: ${err.message}`);
