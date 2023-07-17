@@ -14,11 +14,11 @@ model User {
 }
 
 model Recipe {
-  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
   name         String
   description  String
-  ingredients  String
-  instructions String
-  cookTime     Int
-  image        String
+  ingredients  String[]
+  instructions String[]
+  cookTime     String
+  imageURL     String
 }

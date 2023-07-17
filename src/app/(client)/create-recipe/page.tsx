@@ -14,7 +14,7 @@ function CreateRecipe() {
     ingredients: [] as string[],
     instructions: [] as string[],
     cookTime: 0,
-    image: "",
+    imageURL: "",
   });
 
   useEffect(() => {
@@ -29,30 +29,46 @@ function CreateRecipe() {
     const { name, value } = e.target;
     setRecipe({ ...recipe, [name]: value });
   }
+
   function handleChangeIngredients(e: any, index: number) {
     const { value } = e.target;
     const ingredients = recipe.ingredients;
     ingredients[index] = value;
     setRecipe({ ...recipe, ingredients });
   }
+
   function handleChangeInstructions(e: any, index: number) {
     const { value } = e.target;
     const instructions = recipe.instructions;
     instructions[index] = value;
     setRecipe({ ...recipe, instructions });
   }
-  // TODO: Image upload ändern (statt Bild, URL eingeben)
-  function handleChangeImage(e: React.ChangeEvent<HTMLInputElement>) {
-    if (!e.target.files) return;
-    const file = URL.createObjectURL(e.target.files[0]);
-    setRecipe({ ...recipe, image: file });
-  }
 
   function addIngredient() {
     setRecipe({ ...recipe, ingredients: [...recipe.ingredients, ""] });
   }
+
   function addInstruction() {
     setRecipe({ ...recipe, instructions: [...recipe.instructions, ""] });
+  }
+
+  async function handleSubmit(e: any) {
+    e.preventDefault();
+    try {
+      const res = await fetch("http://localhost:3000/api/recipe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(recipe),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        alert(`Unable to create recipe, reason: ${data.error}`);
+        return;
+      }
+      router.push("/");
+    } catch (err: any) {
+      alert(`Unable to create recipe, reason: ${err.message}`);
+    }
   }
 
   if (!isClient) {
@@ -74,7 +90,7 @@ function CreateRecipe() {
               id="name"
               name="name"
               type="text"
-              placeholder="Name"
+              placeholder="Enter Recipe Name ..."
               onChange={handleChange}
               required
             />
@@ -88,7 +104,7 @@ function CreateRecipe() {
             </label>
             <textarea
               className="shadow border rounded w-full py-2 px-3 text-gray-900  focus:outline-none focus:shadow-outline mb-4"
-              placeholder="Enter description ..."
+              placeholder="Enter Description ..."
               id="description"
               name="description"
               onChange={handleChange}
@@ -110,7 +126,7 @@ function CreateRecipe() {
                 name="ingredients"
                 type="text"
                 value={ingredient}
-                placeholder="Ingredient"
+                placeholder="Enter Ingredient ..."
                 onChange={(e) => handleChangeIngredients(e, index)}
                 required
               />
@@ -138,7 +154,7 @@ function CreateRecipe() {
                 name="instructions"
                 type="text"
                 value={instruction}
-                placeholder="Instruction"
+                placeholder="Enter Instruction ..."
                 onChange={(e) => handleChangeInstructions(e, index)}
                 required
               />
@@ -163,7 +179,7 @@ function CreateRecipe() {
               id="cookTime"
               name="cookTime"
               type="number"
-              placeholder="Cooking Time in minutes"
+              placeholder="Enter Cooking Time in minutes ..."
               onChange={handleChange}
               required
             />
@@ -171,20 +187,27 @@ function CreateRecipe() {
           <div className="mb-4">
             <label
               className="block text-gray-900 font-bold mb-2"
-              htmlFor="image"
+              htmlFor="name"
             >
-              Image
+              Image URL
             </label>
             <input
-              id="image"
-              name="image"
-              type="file"
-              accept="image/*"
-              placeholder="Image"
-              onChange={handleChangeImage}
+              className="shadow border rounded w-full py-2 px-3 text-gray-900  focus:outline-none focus:shadow-outline"
+              id="imageURL"
+              name="imageURL"
+              type="text"
+              placeholder="Enter Image URL ..."
+              onChange={handleChange}
               required
             />
           </div>
+          <button
+            className="bg-blue-500 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="submit"
+            onClick={handleSubmit}
+          >
+            Submit
+          </button>
         </form>
       </div>
     );
