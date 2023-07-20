@@ -13,26 +13,41 @@ interface Recipe {
 }
 
 async function SavedRecipes() {
-  const res = await fetch("http://localhost:3000/api/recipe", {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  });
-  if (!res.ok) {
-    throw new Error(res.statusText);
+  async function getSavedRecipes() {
+    try {
+      const res = await fetch("http://localhost:3000/api/recipe", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        cache: "no-cache",
+      });
+      if (!res.ok) {
+        throw new Error(res.statusText);
+      }
+      const data = await res.json();
+      return data.recipes;
+    } catch (err) {
+      alert(err);
+    }
   }
-  const data = await res.json();
-  const recipes: Recipe[] = data.recipes;
+  const recipes: Recipe[] = await getSavedRecipes();
   return (
     <div className="my-10">
-      <h1 className="flex text-4xl font-bold text-gray-900 mb-10 justify-center ">
+      <h1
+        className="flex text-4xl font-bold text-gray-900 mb-10 
+      justify-center"
+      >
         Saved Recipes
       </h1>
-      <div className="flex flex-wrap justify-between mx-16 gap-10">
+      <div className="flex flex-wrap justify-start gap-10">
         {recipes.map((recipe) => (
           <Link
-            href={`/saved-recipes/${recipe.name.toLowerCase()}/${recipe.id}`}
+            href={`/saved-recipes/${recipe.name
+              .toLowerCase()
+              .replace(/\s+/g, "")
+              .trim()}/${recipe.id}`}
             key={recipe.id}
-            className="flex flex-col border shadow rounded-lg overflow-hidden w-[300px]"
+            className="flex flex-col border shadow rounded-lg overflow-hidden 
+            w-[300px] mx-auto"
           >
             <Image
               width={300}

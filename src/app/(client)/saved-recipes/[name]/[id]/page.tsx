@@ -51,7 +51,7 @@ async function SpecificRecipe({ params }: { params: { id: string } }) {
             <h2 className="text-2xl font-semibold text-gray-900">
               Instructions
             </h2>
-            <ol className="list-decimal pl-5">
+            <ol>
               {recipe.instructions.map((instruction) => (
                 <li key={instruction}>{instruction}</li>
               ))}
