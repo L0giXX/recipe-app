@@ -1,5 +1,4 @@
-"use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -13,26 +12,16 @@ interface Recipe {
   imageURL: string;
 }
 
-function SavedRecipes() {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  async function getSavedRecipes() {
-    try {
-      const res = await fetch("http://localhost:3000/api/recipe", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!res.ok) {
-        throw new Error(res.statusText);
-      }
-      const data = await res.json();
-      setRecipes(data.recipes);
-    } catch (err) {
-      alert(err);
-    }
+async function SavedRecipes() {
+  const res = await fetch("http://localhost:3000/api/recipe", {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!res.ok) {
+    throw new Error(res.statusText);
   }
-  useEffect(() => {
-    getSavedRecipes();
-  }, []);
+  const data = await res.json();
+  const recipes: Recipe[] = data.recipes;
   return (
     <div className="my-10">
       <h1 className="flex text-4xl font-bold text-gray-900 mb-10 justify-center ">
@@ -41,7 +30,7 @@ function SavedRecipes() {
       <div className="flex flex-wrap justify-between mx-16 gap-10">
         {recipes.map((recipe) => (
           <Link
-            href={`/saved-recipes/${recipe.id}`}
+            href={`/saved-recipes/${recipe.name.toLowerCase()}/${recipe.id}`}
             key={recipe.id}
             className="flex flex-col border shadow rounded-lg overflow-hidden w-[300px]"
           >

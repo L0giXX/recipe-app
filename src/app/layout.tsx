@@ -1,5 +1,7 @@
 import "./globals.css";
+import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./navbar";
+import ToastProvider from "./toast.provider";
 
 export const metadata = {
   title: "Recipe App",
@@ -14,8 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Navbar />
-        {children}
+        <ToastProvider>
+          <Navbar />
+          {children}
+        </ToastProvider>
       </body>
     </html>
   );

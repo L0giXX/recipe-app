@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCookies } from "react-cookie";
+import { toast } from "react-toastify";
 
 export default function LoginRegister() {
   return (
@@ -11,7 +12,6 @@ export default function LoginRegister() {
     </div>
   );
 }
-
 const Login = () => {
   const router = useRouter();
   const [username, setUsername] = useState("");
@@ -32,6 +32,11 @@ const Login = () => {
       }
       const token = await res.text();
       setCookie("access_token", token, { path: "/", maxAge: 60 * 60 * 24 });
+      toast("Login successful!", {
+        theme: "light",
+        type: "success",
+        autoClose: 1000,
+      });
       router.push("/");
     } catch (err: any) {
       alert(`Unable to login, reason: ${err.message}`);
@@ -106,6 +111,11 @@ const Register = () => {
         alert(`Unable to sign up, reason: ${data.error}`);
         return;
       }
+      toast("Sign up successful!", {
+        theme: "light",
+        type: "success",
+        autoClose: 1000,
+      });
     } catch (err: any) {
       alert(`Unable to sign up, reason: ${err.message}`);
     }
