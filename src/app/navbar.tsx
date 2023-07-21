@@ -20,8 +20,8 @@ export default function Navbar() {
   }, [cookies.access_token]);
 
   return (
-    <nav className="bg-gray-900 border-gray-200 py-6  ">
-      <div className="container flex items-center mx-auto justify-center">
+    <nav className="border-gray-200 bg-gray-900 py-6  ">
+      <div className="container mx-auto flex items-center justify-center">
         <ul className="flex text-4xl text-slate-100">
           <li className="mx-20">
             <Link href="/">Home</Link>

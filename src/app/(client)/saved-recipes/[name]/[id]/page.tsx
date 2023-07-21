@@ -24,8 +24,8 @@ async function SpecificRecipe({ params }: { params: { id: string } }) {
 
   return (
     <div>
-      <div className="flex justify-center my-5">
-        <div className="flex flex-col border shadow overflow-hidden w-[600px] justify-center p-5 gap-2">
+      <div className="my-5 flex justify-center">
+        <div className="flex w-[600px] flex-col justify-center gap-2 overflow-hidden border p-5 shadow">
           <h1 className="flex text-4xl font-bold text-gray-900">
             {recipe.name}
           </h1>

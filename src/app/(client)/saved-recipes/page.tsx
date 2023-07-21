@@ -33,8 +33,8 @@ async function SavedRecipes() {
   return (
     <div className="my-10">
       <h1
-        className="flex text-4xl font-bold text-gray-900 mb-10 
-      justify-center"
+        className="mb-10 flex justify-center text-4xl font-bold 
+      text-gray-900"
       >
         Saved Recipes
       </h1>
@@ -46,8 +46,8 @@ async function SavedRecipes() {
               .replace(/\s+/g, "")
               .trim()}/${recipe.id}`}
             key={recipe.id}
-            className="flex flex-col border shadow rounded-lg overflow-hidden 
-            w-[300px] mx-auto"
+            className="mx-auto flex w-[300px] flex-col overflow-hidden rounded-lg 
+            border shadow"
           >
             <Image
               width={300}
@@ -56,7 +56,7 @@ async function SavedRecipes() {
               src={recipe.imageURL}
               alt={recipe.name}
             />
-            <div className="p-5 flex flex-col h-full">
+            <div className="flex h-full flex-col p-5">
               <h2 className="text-2xl font-semibold">{recipe.name}</h2>
               <p className="break-words">{recipe.description}</p>
               <div className="mt-auto">

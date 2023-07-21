@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 export default function LoginRegister() {
   return (
-    <div className="flex justify-center gap-40 text-2xl mt-40">
+    <div className="mt-40 flex justify-center gap-40 text-2xl">
       <Login />
       <Register />
     </div>
@@ -40,16 +40,16 @@ function Login() {
   }
 
   return (
-    <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <form className="mb-4 rounded bg-white px-8 pb-8 pt-6 shadow-md">
       <div className="mb-4">
         <label
-          className="block text-gray-900 font-bold mb-2"
+          className="mb-2 block font-bold text-gray-900"
           htmlFor="username"
         >
           Username
         </label>
         <input
-          className="shadow border rounded w-full py-2 px-3 text-gray-900  focus:outline-none focus:shadow-outline"
+          className="focus:shadow-outline w-full rounded border px-3 py-2 text-gray-900  shadow focus:outline-none"
           id="username"
           type="text"
           placeholder="Username"
@@ -61,13 +61,13 @@ function Login() {
       </div>
       <div className="mb-6">
         <label
-          className="block text-gray-900 font-bold mb-2"
+          className="mb-2 block font-bold text-gray-900"
           htmlFor="password"
         >
           Password
         </label>
         <input
-          className="shadow rounded w-full py-2 px-3 text-gray-900 mb-3 focus:outline-none focus:shadow-outline"
+          className="focus:shadow-outline mb-3 w-full rounded px-3 py-2 text-gray-900 shadow focus:outline-none"
           id="password"
           type="password"
           placeholder="******************"
@@ -79,7 +79,7 @@ function Login() {
       </div>
       <div className="flex items-center justify-between">
         <button
-          className="bg-blue-500 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-900 focus:outline-none"
           type="button"
           onClick={loginHandler}
         >
@@ -115,16 +115,16 @@ function Register() {
   }
 
   return (
-    <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <form className="mb-4 rounded bg-white px-8 pb-8 pt-6 shadow-md">
       <div className="mb-4">
         <label
-          className="block text-gray-900 font-bold mb-2"
+          className="mb-2 block font-bold text-gray-900"
           htmlFor="username"
         >
           Username
         </label>
         <input
-          className="shadow border rounded w-full py-2 px-3 text-gray-900  focus:outline-none focus:shadow-outline"
+          className="focus:shadow-outline w-full rounded border px-3 py-2 text-gray-900  shadow focus:outline-none"
           id="username"
           type="text"
           placeholder="Username"
@@ -137,13 +137,13 @@ function Register() {
       </div>
       <div className="mb-6">
         <label
-          className="block text-gray-900 font-bold mb-2"
+          className="mb-2 block font-bold text-gray-900"
           htmlFor="password"
         >
           Password
         </label>
         <input
-          className="shadow border  rounded w-full py-2 px-3 text-gray-900 mb-3 focus:outline-none focus:shadow-outline"
+          className="focus:shadow-outline mb-3  w-full rounded border px-3 py-2 text-gray-900 shadow focus:outline-none"
           id="password"
           type="password"
           placeholder="******************"
@@ -156,7 +156,7 @@ function Register() {
       </div>
       <div className="flex items-center justify-between">
         <button
-          className="bg-blue-500 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-900 focus:outline-none"
           type="button"
           onClick={registerHandler}
         >
