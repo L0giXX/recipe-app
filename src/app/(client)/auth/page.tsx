@@ -12,35 +12,31 @@ export default function LoginRegister() {
     </div>
   );
 }
-const Login = () => {
+function Login() {
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [cookies, setCookie] = useCookies(["access_token"]);
-  async function loginHandler(e: any) {
-    e.preventDefault();
-    try {
-      const res = await fetch("http://localhost:3000/api/user/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
-      if (!res.ok) {
-        const data = await res.json();
-        alert(`Unable to login, reason: ${data.error}`);
-        return;
-      }
-      const token = await res.text();
-      setCookie("access_token", token, { path: "/", maxAge: 60 * 60 * 24 });
-      toast("Login successful!", {
-        theme: "light",
-        type: "success",
-        autoClose: 1000,
-      });
-      router.push("/");
-    } catch (err: any) {
-      alert(`Unable to login, reason: ${err.message}`);
+  const [_, setCookie] = useCookies(["access_token"]);
+
+  async function loginHandler() {
+    const res = await fetch("http://localhost:3000/api/user/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
+    });
+    if (!res.ok) {
+      const data = await res.json();
+      alert(`Unable to login, reason: ${data.error}`);
+      return;
     }
+    const token = await res.text();
+    setCookie("access_token", token, { path: "/", maxAge: 60 * 60 * 24 });
+    toast("Login successful!", {
+      theme: "light",
+      type: "success",
+      autoClose: 1000,
+    });
+    router.push("/");
   }
 
   return (
@@ -92,33 +88,30 @@ const Login = () => {
       </div>
     </form>
   );
-};
+}
 
-const Register = () => {
+function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   async function registerHandler(e: any) {
-    e.preventDefault();
-    try {
-      const res = await fetch("http://localhost:3000/api/user/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
-      if (!res.ok) {
-        const data = await res.json();
-        alert(`Unable to sign up, reason: ${data.error}`);
-        return;
-      }
-      toast("Sign up successful!", {
-        theme: "light",
-        type: "success",
-        autoClose: 1000,
-      });
-    } catch (err: any) {
-      alert(`Unable to sign up, reason: ${err.message}`);
+    const res = await fetch("http://localhost:3000/api/user/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
+    });
+    if (!res.ok) {
+      const data = await res.json();
+      alert(`Unable to sign up, reason: ${data.error}`);
+      return;
     }
+    toast("Sign up successful!", {
+      theme: "light",
+      type: "success",
+      autoClose: 1000,
+    });
+    setUsername("");
+    setPassword("");
   }
 
   return (
@@ -138,6 +131,7 @@ const Register = () => {
           onChange={(e) => {
             setUsername(e.target.value);
           }}
+          value={username}
           required
         />
       </div>
@@ -156,6 +150,7 @@ const Register = () => {
           onChange={(e) => {
             setPassword(e.target.value);
           }}
+          value={password}
           required
         />
       </div>
@@ -170,4 +165,4 @@ const Register = () => {
       </div>
     </form>
   );
-};
+}

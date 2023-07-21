@@ -2,7 +2,8 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useCookies } from "react-cookie";
-function Navbar() {
+
+export default function Navbar() {
   const [cookies, setCookie, removeCookie] = useCookies(["access_token"]);
   const [isClient, setIsClient] = useState(false);
 
@@ -45,5 +46,3 @@ function Navbar() {
     </nav>
   );
 }
-
-export default Navbar;
