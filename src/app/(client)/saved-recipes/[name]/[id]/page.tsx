@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -33,7 +33,7 @@ function SpecificRecipe({ params }: { params: { id: string } }) {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
 
   async function deleteRecipe() {
-    const res = await fetch(`http://localhost:3000/api/recipe/${params.id}`, {
+    const res = await fetch(`http://127.0.0.1:3000/api/recipe/${params.id}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
     });
@@ -49,14 +49,16 @@ function SpecificRecipe({ params }: { params: { id: string } }) {
     router.push("/saved-recipes");
   }
 
-  (async () => {
-    try {
-      const fetchedRecipe = await getSavedRecipes(params.id);
-      setRecipe(fetchedRecipe);
-    } catch (error) {
-      console.error("Error fetching recipe:", error);
-    }
-  })();
+  useEffect(() => {
+    (async () => {
+      try {
+        const fetchedRecipe = await getSavedRecipes(params.id);
+        setRecipe(fetchedRecipe);
+      } catch (error) {
+        console.error("Error fetching recipe:", error);
+      }
+    })();
+  }, [params.id]);
 
   return (
     <div>
