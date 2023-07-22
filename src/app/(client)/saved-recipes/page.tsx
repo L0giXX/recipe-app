@@ -13,23 +13,17 @@ interface Recipe {
 }
 
 async function SavedRecipes() {
-  async function getSavedRecipes() {
-    try {
-      const res = await fetch("http://localhost:3000/api/recipe", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        cache: "no-cache",
-      });
-      if (!res.ok) {
-        throw new Error(res.statusText);
-      }
-      const data = await res.json();
-      return data.recipes;
-    } catch (err) {
-      alert(err);
-    }
+  const res = await fetch("http://localhost:3000/api/recipe", {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+    cache: "no-cache",
+  });
+  if (!res.ok) {
+    throw new Error(res.statusText);
   }
-  const recipes: Recipe[] = await getSavedRecipes();
+  const data = await res.json();
+  const recipes: Recipe[] = data.recipes;
+
   return (
     <div className="my-10">
       <h1
