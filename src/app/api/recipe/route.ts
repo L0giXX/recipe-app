@@ -17,8 +17,3 @@ export async function POST(request: Request) {
   });
   return NextResponse.json({ recipe }, { status: 201 });
 }
-
-export async function GET() {
-  const recipes = await prisma.recipe.findMany();
-  return NextResponse.json({ recipes }, { status: 200 });
-}

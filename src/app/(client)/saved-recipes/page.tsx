@@ -3,16 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import prisma from "../../../utils/prisma";
 
-interface Recipe {
-  id: string;
-  name: string;
-  description: string;
-  ingredients: string[];
-  instructions: string[];
-  cookTime: string;
-  imageURL: string;
-}
-
 async function SavedRecipes() {
   const recipes = await prisma.recipe.findMany();
 
