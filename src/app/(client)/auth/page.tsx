@@ -19,7 +19,7 @@ function Login() {
   const [_, setCookie] = useCookies(["access_token"]);
 
   async function loginHandler() {
-    const res = await fetch("http://127.0.0.1/api/user/login", {
+    const res = await fetch("http://127.0.0.1:3000/api/user/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
@@ -95,7 +95,7 @@ function Register() {
   const [password, setPassword] = useState("");
 
   async function registerHandler(e: any) {
-    const res = await fetch("http://127.0.0.1/api/user/signup", {
+    const res = await fetch("http://127.0.0.1:3000/api/user/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
