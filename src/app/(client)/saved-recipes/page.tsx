@@ -14,25 +14,13 @@ interface Recipe {
 }
 
 async function getSavedRecipes() {
-  try {
-    const res = await fetch("http://127.0.0.1:3000/api/recipe", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      cache: "no-cache",
-    });
-    if (!res.ok) {
-      throw new Error(res.statusText);
-    }
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    console.log(err);
-  }
+  const recipes = await prisma.recipe.findMany();
+  return { recipes };
 }
 
 async function SavedRecipes() {
   const data = await getSavedRecipes();
-  const recipes: Recipe[] = data.recipes;
+  const recipes = data.recipes;
 
   return (
     <div className="my-10">
