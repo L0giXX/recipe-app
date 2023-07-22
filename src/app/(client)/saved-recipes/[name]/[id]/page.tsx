@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import Loading from "../../loading";
 
 interface Recipe {
   id: string;
@@ -106,7 +107,7 @@ function SpecificRecipe({ params }: { params: { id: string } }) {
           </div>
         </div>
       ) : (
-        <p>Loading...</p>
+        <Loading />
       )}
     </div>
   );
