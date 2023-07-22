@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import prisma from "../../../../utils/prisma";
+import { prisma } from "../../../../utils/prisma";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { env } from "../../../../utils/env";

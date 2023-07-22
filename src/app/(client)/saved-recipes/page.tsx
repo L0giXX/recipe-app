@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import prisma from "../../../utils/prisma";
 
 interface Recipe {
   id: string;
@@ -13,15 +12,24 @@ interface Recipe {
   imageURL: string;
 }
 
-async function getSavedRecipes() {
-  const recipes = await prisma.recipe.findMany();
-  return { recipes };
-}
-
 async function SavedRecipes() {
-  const data = await getSavedRecipes();
-  const recipes = data.recipes;
-
+  async function getSavedRecipes() {
+    try {
+      const res = await fetch("http://localhost:3000/api/recipe", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        cache: "no-cache",
+      });
+      if (!res.ok) {
+        throw new Error(res.statusText);
+      }
+      const data = await res.json();
+      return data.recipes;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  const recipes: Recipe[] = await getSavedRecipes();
   return (
     <div className="my-10">
       <h1
