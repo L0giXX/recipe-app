@@ -38,7 +38,7 @@ async function SavedRecipes() {
       >
         Saved Recipes
       </h1>
-      <div className="flex flex-wrap justify-start gap-10">
+      <div className="flex flex-wrap justify-start gap-10 mx-10">
         {recipes.map((recipe) => (
           <Link
             href={`/saved-recipes/${recipe.name
