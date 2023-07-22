@@ -3,8 +3,27 @@ import Image from "next/image";
 import Link from "next/link";
 import prisma from "../../../utils/prisma";
 
+interface Recipe {
+  id: string;
+  name: string;
+  description: string;
+  ingredients: string[];
+  instructions: string[];
+  cookTime: string;
+  imageURL: string;
+}
+
 async function SavedRecipes() {
-  const recipes = await prisma.recipe.findMany();
+  const res = await fetch("http://127.0.0.1:3000/api/recipe", {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+    cache: "no-cache",
+  });
+  if (!res.ok) {
+    throw new Error(res.statusText);
+  }
+  const data = await res.json();
+  const recipes: Recipe[] = data.recipes;
 
   return (
     <div className="my-10">
