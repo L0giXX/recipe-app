@@ -3,6 +3,7 @@ import { prisma } from "../../../../utils/prisma";
 import bcrypt from "bcryptjs";
 
 export async function POST(request: Request) {
+  const origin = request.headers.get("origin");
   const body = await request.json();
   const { username, password } = body;
   const hash = await bcrypt.hash(password, 10);
@@ -21,11 +22,21 @@ export async function POST(request: Request) {
     });
     return NextResponse.json(
       { message: "User " + user.username + " created" },
-      { status: 201 }
+      {
+        headers: {
+          "Access-Control-Allow-Origin": origin || "*",
+          "Content-Type": "application/json",
+        },
+      }
     );
   }
   return NextResponse.json(
     { error: "Username already in use" },
-    { status: 404 }
+    {
+      headers: {
+        "Access-Control-Allow-Origin": origin || "*",
+        "Content-Type": "application/json",
+      },
+    }
   );
 }

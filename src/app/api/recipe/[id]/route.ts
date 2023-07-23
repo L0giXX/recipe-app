@@ -6,10 +6,19 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   const { id } = params;
+  const origin = request.headers.get("origin");
   const recipe = await prisma.recipe.findUnique({
     where: { id: id },
   });
-  return NextResponse.json({ recipe }, { status: 200 });
+  return NextResponse.json(
+    { recipe },
+    {
+      headers: {
+        "Access-Control-Allow-Origin": origin || "*",
+        "Content-Type": "application/json",
+      },
+    }
+  );
 }
 
 export async function DELETE(
@@ -17,11 +26,17 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   const { id } = params;
+  const origin = request.headers.get("origin");
   const recipe = await prisma.recipe.delete({
     where: { id: id },
   });
   return NextResponse.json(
     { message: "Rezept wurde gelöscht" },
-    { status: 200 }
+    {
+      headers: {
+        "Access-Control-Allow-Origin": origin || "*",
+        "Content-Type": "plain/text",
+      },
+    }
   );
 }
