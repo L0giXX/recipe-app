@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -12,25 +13,38 @@ interface Recipe {
   imageURL: string;
 }
 
-async function SavedRecipes() {
+async function getSavedRecipes() {
   const server = process.env.SERVER;
-  async function getSavedRecipes() {
-    try {
-      const res = await fetch(`${server}/api/recipe`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        cache: "no-cache",
-      });
-      if (!res.ok) {
-        throw new Error(res.statusText);
-      }
-      const data = await res.json();
-      return data.recipes;
-    } catch (err) {
-      console.error(err);
+  try {
+    const res = await fetch(`${server}/api/recipe`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      cache: "no-cache",
+    });
+    if (!res.ok) {
+      throw new Error(res.statusText);
     }
+    const data = await res.json();
+    return data.recipes;
+  } catch (err) {
+    console.error(err);
   }
-  const recipes: Recipe[] = await getSavedRecipes();
+}
+
+function SavedRecipes() {
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const fetchedRecipes = await getSavedRecipes();
+        setRecipes(fetchedRecipes);
+      } catch (error) {
+        console.error("Error fetching recipes:", error);
+      }
+    })();
+  }, []);
+
   return (
     <div className="my-10">
       <h1
