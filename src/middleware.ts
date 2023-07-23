@@ -15,5 +15,5 @@ export function middleware(request: Request) {
   return NextResponse.next();
 }
 export const config = {
-  matcher: "/about/:path*",
+  matcher: "/api/:path*",
 };
