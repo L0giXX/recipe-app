@@ -13,13 +13,14 @@ export default function LoginRegister() {
   );
 }
 function Login() {
+  const server = process.env.SERVER;
   const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [_, setCookie] = useCookies(["access_token"]);
 
   async function loginHandler() {
-    const res = await fetch("http://localhost:3000/api/user/login", {
+    const res = await fetch(`${server}/api/user/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
@@ -91,11 +92,12 @@ function Login() {
 }
 
 function Register() {
+  const server = process.env.SERVER;
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   async function registerHandler(e: any) {
-    const res = await fetch("http://localhost:3000/api/user/signup", {
+    const res = await fetch(`${server}/api/user/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),

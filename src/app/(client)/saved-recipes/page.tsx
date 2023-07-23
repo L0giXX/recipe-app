@@ -13,9 +13,10 @@ interface Recipe {
 }
 
 async function SavedRecipes() {
+  const server = process.env.SERVER;
   async function getSavedRecipes() {
     try {
-      const res = await fetch("http://localhost:3000/api/recipe", {
+      const res = await fetch(`${server}/api/recipe`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         cache: "no-cache",

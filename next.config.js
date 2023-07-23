@@ -8,6 +8,12 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    serverActions: true,
+  },
+  env: {
+    SERVER: process.env.SERVER,
+  },
 };
 
 module.exports = nextConfig;

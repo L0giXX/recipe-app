@@ -53,8 +53,9 @@ function CreateRecipe() {
 
   async function handleSubmit(e: any) {
     e.preventDefault();
+    const server = process.env.SERVER;
     try {
-      const res = await fetch("http://localhost:3000/api/recipe", {
+      const res = await fetch(`${server}/api/recipe`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(recipe),
