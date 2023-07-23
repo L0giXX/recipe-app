@@ -20,24 +20,28 @@ function Login() {
   const [_, setCookie] = useCookies(["access_token"]);
 
   async function loginHandler() {
-    const res = await fetch(`${server}/api/user/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-    if (!res.ok) {
-      const data = await res.json();
-      alert(`Unable to login, reason: ${data.error}`);
-      return;
+    try {
+      const res = await fetch(`${server}/api/user/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        alert(`Unable to login, reason: ${data.error}`);
+        return;
+      }
+      const token = await res.text();
+      setCookie("access_token", token, { path: "/", maxAge: 60 * 60 * 24 });
+      toast("Login successful!", {
+        theme: "light",
+        type: "success",
+        autoClose: 1000,
+      });
+      router.push("/");
+    } catch (err) {
+      console.error(err);
     }
-    const token = await res.text();
-    setCookie("access_token", token, { path: "/", maxAge: 60 * 60 * 24 });
-    toast("Login successful!", {
-      theme: "light",
-      type: "success",
-      autoClose: 1000,
-    });
-    router.push("/");
   }
 
   return (
@@ -96,24 +100,28 @@ function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  async function registerHandler(e: any) {
-    const res = await fetch(`${server}/api/user/signup`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-    if (!res.ok) {
-      const data = await res.json();
-      alert(`Unable to sign up, reason: ${data.error}`);
-      return;
+  async function registerHandler() {
+    try {
+      const res = await fetch(`${server}/api/user/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        alert(`Unable to sign up, reason: ${data.error}`);
+        return;
+      }
+      toast("Sign up successful!", {
+        theme: "light",
+        type: "success",
+        autoClose: 1000,
+      });
+      setUsername("");
+      setPassword("");
+    } catch (err) {
+      console.error(err);
     }
-    toast("Sign up successful!", {
-      theme: "light",
-      type: "success",
-      autoClose: 1000,
-    });
-    setUsername("");
-    setPassword("");
   }
 
   return (
