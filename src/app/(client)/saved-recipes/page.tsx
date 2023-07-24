@@ -25,8 +25,7 @@ async function getSavedRecipes() {
   const data = await res.json();
   return data.recipes;
 }
-
-export default async function SavedRecipes() {
+async function SavedRecipes() {
   const recipes = (await getSavedRecipes()) as Recipe[];
 
   return (
@@ -67,3 +66,5 @@ export default async function SavedRecipes() {
     </div>
   );
 }
+
+export default SavedRecipes;

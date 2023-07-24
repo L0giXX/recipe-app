@@ -1,11 +1,8 @@
-"use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
-import Loading from "../../loading";
+import Button from "./button";
 
-interface Recipe {
+type Recipe = {
   id: string;
   name: string;
   description: string;
@@ -13,7 +10,7 @@ interface Recipe {
   instructions: string[];
   cookTime: string;
   imageURL: string;
-}
+};
 
 async function getSavedRecipes(id: string) {
   const server = process.env.SERVER;
@@ -25,95 +22,55 @@ async function getSavedRecipes(id: string) {
     throw new Error(res.statusText);
   }
   const data = await res.json();
-  const recipe: Recipe = data.recipe;
-  return recipe;
+  return data.recipe;
 }
 
-function SpecificRecipe({ params }: { params: { id: string } }) {
-  const server = process.env.SERVER;
-  const router = useRouter();
-  const [recipe, setRecipe] = useState<Recipe | null>(null);
-
-  async function deleteRecipe() {
-    const res = await fetch(`${server}/api/recipe/${params.id}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    });
-    console.log(res);
-    if (!res.ok) {
-      throw new Error(res.statusText);
-    }
-    toast("Recipe deleted!", {
-      theme: "light",
-      type: "success",
-      autoClose: 1000,
-    });
-    router.push("/saved-recipes");
-  }
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const fetchedRecipe = await getSavedRecipes(params.id);
-        setRecipe(fetchedRecipe);
-      } catch (error) {
-        console.error("Error fetching recipe:", error);
-      }
-    })();
-  }, [params.id]);
+async function SpecificRecipe({ params }: { params: { id: string } }) {
+  const recipe = (await getSavedRecipes(params.id)) as Recipe;
 
   return (
     <div>
-      {recipe ? ( // Check if recipe is not null
-        <div className="my-5 flex justify-center">
-          <div className="flex w-[600px] flex-col justify-center gap-2 overflow-hidden border p-5 shadow group relative">
-            <div className="flex flex-row justify-between">
-              <h1 className="flex flex- text-4xl font-bold text-gray-900">
-                {recipe.name}
-              </h1>
-              <button
-                className="hidden group-hover:block w-10 h-10 border rounded-full items-center shrink-0 grow-0 bg-red-500 text-white font-bold justify-center"
-                type="button"
-                onClick={deleteRecipe}
-              >
-                X
-              </button>
-            </div>
-            <p className="break-words">{recipe.description}</p>
-            <Image
-              width={600}
-              height={600}
-              className="object-cover"
-              src={recipe.imageURL}
-              alt={recipe.name}
-            />
-            <div>
-              <h2 className="text-2xl font-semibold text-gray-900">
-                Ingredients
-              </h2>
-              <ul className="list-disc pl-5">
-                {recipe.ingredients.map((ingredient) => (
-                  <li key={ingredient}>{ingredient}</li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h2 className="text-2xl font-semibold text-gray-900">
-                Instructions
-              </h2>
-              <ol>
-                {recipe.instructions.map((instruction) => (
-                  <li key={instruction}>{instruction}</li>
-                ))}
-              </ol>
-            </div>
-            <p className="mt-2">Cooking Time: {recipe.cookTime} Minutes</p>
+      <div className="my-5 flex justify-center">
+        <div className="flex w-[600px] flex-col justify-center gap-2 overflow-hidden border p-5 shadow group relative">
+          <div className="flex flex-row justify-between">
+            <h1 className="flex flex- text-4xl font-bold text-gray-900">
+              {recipe.name}
+            </h1>
+            <Button id={params.id} />
           </div>
+          <p className="break-words">{recipe.description}</p>
+          <Image
+            width={600}
+            height={600}
+            className="object-cover"
+            src={recipe.imageURL}
+            alt={recipe.name}
+          />
+          <div>
+            <h2 className="text-2xl font-semibold text-gray-900">
+              Ingredients
+            </h2>
+            <ul className="list-disc pl-5">
+              {recipe.ingredients.map((ingredient) => (
+                <li key={ingredient}>{ingredient}</li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h2 className="text-2xl font-semibold text-gray-900">
+              Instructions
+            </h2>
+            <ol>
+              {recipe.instructions.map((instruction) => (
+                <li key={instruction}>{instruction}</li>
+              ))}
+            </ol>
+          </div>
+          <p className="mt-2">Cooking Time: {recipe.cookTime} Minutes</p>
         </div>
-      ) : (
-        <Loading />
-      )}
+      </div>
     </div>
   );
 }
+
 export default SpecificRecipe;
