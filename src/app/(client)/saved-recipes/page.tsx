@@ -1,9 +1,8 @@
-"use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-interface Recipe {
+type Recipe = {
   id: string;
   name: string;
   description: string;
@@ -11,39 +10,24 @@ interface Recipe {
   instructions: string[];
   cookTime: string;
   imageURL: string;
-}
+};
 
 async function getSavedRecipes() {
   const server = process.env.SERVER;
-  try {
-    const res = await fetch(`${server}/api/recipe`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      cache: "no-cache",
-    });
-    if (!res.ok) {
-      throw new Error(res.statusText);
-    }
-    const data = await res.json();
-    return data.recipes;
-  } catch (err) {
-    console.error(err);
+  const res = await fetch(`${server}/api/recipe`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+    cache: "no-cache",
+  });
+  if (!res.ok) {
+    throw new Error("Failed to fetch recipes");
   }
+  const data = await res.json();
+  return data.recipes;
 }
 
-function SavedRecipes() {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const fetchedRecipes = await getSavedRecipes();
-        setRecipes(fetchedRecipes);
-      } catch (error) {
-        console.error("Error fetching recipes:", error);
-      }
-    })();
-  }, []);
+export default async function SavedRecipes() {
+  const recipes = (await getSavedRecipes()) as Recipe[];
 
   return (
     <div className="my-10">
@@ -83,5 +67,3 @@ function SavedRecipes() {
     </div>
   );
 }
-
-export default SavedRecipes;
