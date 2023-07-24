@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 export default function LoginRegister() {
   return (
-    <div className="mt-40 flex justify-center gap-40 text-2xl">
+    <div className="my-20 flex flex-wrap justify-center gap-40 text-2xl">
       <Login />
       <Register />
     </div>

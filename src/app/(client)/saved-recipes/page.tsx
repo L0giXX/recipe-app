@@ -61,8 +61,7 @@ function SavedRecipes() {
               .replace(/\s+/g, "")
               .trim()}/${recipe.id}`}
             key={recipe.id}
-            className="mx-auto flex w-[300px] flex-col overflow-hidden rounded-lg 
-            border shadow"
+            className="mx-auto flex w-[300px] flex-col overflow-hidden rounded-lg border shadow"
           >
             <Image
               width={300}
