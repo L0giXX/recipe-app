@@ -73,7 +73,6 @@ export default function Forms({ user }: Props) {
   }
   return (
     <div className="mt-10 flex flex-col items-center">
-      <div>{user?.name}</div>
       <h1 className="mb-4 text-4xl font-bold text-gray-900">Create Recipe</h1>
       <form className="mb-4 rounded bg-white px-8 pb-8 pt-6 shadow-md">
         <div className="mb-4">
