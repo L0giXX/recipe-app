@@ -1,23 +1,8 @@
-"use client";
-import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { useCookies } from "react-cookie";
-
-export default function Navbar() {
-  const [cookies, setCookie, removeCookie] = useCookies(["access_token"]);
-  const [isClient, setIsClient] = useState(false);
-
-  function logoutHandler() {
-    removeCookie("access_token");
-  }
-
-  useEffect(() => {
-    if (cookies.access_token) {
-      setIsClient(true);
-    } else {
-      setIsClient(false);
-    }
-  }, [cookies.access_token]);
+import { options } from "./api/auth/[...nextauth]/options";
+import { getServerSession } from "next-auth";
+export default async function Navbar() {
+  const session = await getServerSession(options);
 
   return (
     <nav className="border-gray-200 bg-gray-900 py-6 ">
@@ -33,12 +18,10 @@ export default function Navbar() {
             <Link href="/saved-recipes">Saved Recipe</Link>
           </li>
           <li className="">
-            {!isClient ? (
-              <Link href="/auth">Login/Register</Link>
+            {!session ? (
+              <Link href="/api/auth/signin">Login</Link>
             ) : (
-              <Link href="/" onClick={logoutHandler}>
-                Logout
-              </Link>
+              <Link href="/api/auth/signout">Logout</Link>
             )}
           </li>
         </ul>

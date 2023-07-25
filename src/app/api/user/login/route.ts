@@ -7,15 +7,15 @@ import { env } from "../../../../utils/env";
 export async function POST(request: Request) {
   const origin = request.headers.get("origin");
   const body = await request.json();
-  const { username, password } = body;
+  const { name, password } = body;
   const user = await prisma.user.findUnique({
     where: {
-      username,
+      name,
     },
   });
   if (!user) {
     return NextResponse.json(
-      { error: "User " + username + " not found" },
+      { error: "User " + name + " not found" },
       {
         headers: {
           "Access-Control-Allow-Origin": origin || "*",
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
   }
   // Create JWT
   const secret = env.JWT_SECRET;
-  const token = jwt.sign({ username }, secret);
+  const token = jwt.sign({ name }, secret);
 
   return NextResponse.json(
     { token },

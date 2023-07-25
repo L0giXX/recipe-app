@@ -5,23 +5,23 @@ import bcrypt from "bcryptjs";
 export async function POST(request: Request) {
   const origin = request.headers.get("origin");
   const body = await request.json();
-  const { username, password } = body;
+  const { name, password } = body;
   const hash = await bcrypt.hash(password, 10);
   const usern = await prisma.user.findUnique({
     where: {
-      username,
+      name,
     },
   });
 
   if (!usern) {
     const user = await prisma.user.create({
       data: {
-        username,
+        name,
         password: hash,
       },
     });
     return NextResponse.json(
-      { message: "User " + user.username + " created" },
+      { message: "User " + user.name + " created" },
       {
         headers: {
           "Access-Control-Allow-Origin": origin || "*",
