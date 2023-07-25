@@ -1,8 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-
-const prisma = new PrismaClient();
+import { prisma } from "../../../../utils/prisma";
 
 export const options: NextAuthOptions = {
   providers: [
@@ -13,7 +11,7 @@ export const options: NextAuthOptions = {
         password: {
           label: "Password",
           type: "password",
-          placeholder: "********",
+          placeholder: "***********",
         },
       },
       async authorize(credentials) {
