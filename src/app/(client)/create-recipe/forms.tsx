@@ -2,19 +2,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 
-type User =
-  | {
-      name?: string | null | undefined;
-      email?: string | null | undefined;
-      image?: string | null | undefined;
-    }
-  | undefined;
-
-type Props = {
-  user: User;
-};
-
-export default function Forms({ user }: Props) {
+export default function Forms() {
   const router = useRouter();
   const [recipe, setRecipe] = useState({
     name: "",

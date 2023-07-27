@@ -7,13 +7,7 @@ import Forms from "./forms";
 async function CreateRecipe() {
   const session = await getServerSession(options);
   return (
-    <>
-      {session ? (
-        <Forms user={session.user} />
-      ) : (
-        redirect("/api/auth/signin?callbackUrl=/")
-      )}
-    </>
+    <>{session ? <Forms /> : redirect("/api/auth/signin?callbackUrl=/")}</>
   );
 }
 
