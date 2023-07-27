@@ -11,9 +11,7 @@ async function CreateRecipe() {
       {session ? (
         <Forms user={session.user} />
       ) : (
-        <div>
-          <h1>Access Denied</h1>
-        </div>
+        redirect("/api/auth/signin?callbackUrl=/")
       )}
     </>
   );

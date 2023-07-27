@@ -20,7 +20,7 @@ export const options: NextAuthOptions = {
         },
       },
       async authorize(credentials) {
-        const user = await prisma.user.findFirst({
+        const user = await prisma.user.findUnique({
           where: {
             name: credentials?.username,
           },
