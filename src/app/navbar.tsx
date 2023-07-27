@@ -1,9 +1,19 @@
 import Link from "next/link";
 import { options } from "./api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
+import Image from "next/image";
+
+type User =
+  | {
+      name?: string | null | undefined;
+      email?: string | null | undefined;
+      image?: string | null | undefined;
+    }
+  | undefined;
 
 export default async function Navbar() {
   const session = await getServerSession(options);
+  const user = session?.user as User;
 
   return (
     <nav className="border-gray-200 bg-gray-900 py-6 ">
@@ -26,7 +36,17 @@ export default async function Navbar() {
             )}
           </li>
           <li>
-            <Link href="/signup">Sign Up</Link>
+            {!session ? (
+              <Link href="/signup">Sign Up</Link>
+            ) : (
+              <Image
+                src={user?.image as string}
+                alt={user?.name as string}
+                width={50}
+                height={50}
+                className="rounded-sm"
+              />
+            )}
           </li>
         </ul>
       </div>

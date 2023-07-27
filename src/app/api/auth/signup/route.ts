@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   const body = await request.json();
   const { name, password } = body;
   const hash = await bcrypt.hash(password, 10);
-  const usern = await prisma.user.findUnique({
+  const usern = await prisma.user.findFirst({
     where: {
       name,
     },
