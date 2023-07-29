@@ -13,31 +13,20 @@ type Recipe = {
   imageURL: string;
 };
 
-async function getSavedRecipes(search: string | undefined) {
+async function getSavedRecipes() {
   const server = process.env.SERVER;
-  if (search === undefined) {
-    const res = await fetch(`${server}/api/recipe`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      cache: "no-cache",
-    });
-    if (!res.ok) {
-      throw new Error("Failed to fetch recipes");
-    }
-    const data = await res.json();
-    return data.recipes;
-  } else {
-    const res = await fetch(`${server}/api/recipe/search/${search}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-    if (!res.ok) {
-      throw new Error("Failed to fetch recipes");
-    }
-    const data = await res.json();
-    return data.recipes;
+  const res = await fetch(`${server}/api/recipe`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+    cache: "no-cache",
+  });
+  if (!res.ok) {
+    throw new Error("Failed to fetch recipes");
   }
+  const data = await res.json();
+  return data.recipes;
 }
+
 async function SavedRecipes({
   searchParams,
 }: {
@@ -48,8 +37,13 @@ async function SavedRecipes({
   const search =
     typeof searchParams.search === "string" ? searchParams.search : undefined;
 
-  const recipes = (await getSavedRecipes(search)) as Recipe[];
-
+  const recipes = (await getSavedRecipes()) as Recipe[];
+  // Filter recipes by search
+  const filteredRecipes = search
+    ? recipes.filter((recipe) =>
+        recipe.name.toLowerCase().includes(search.toLowerCase())
+      )
+    : recipes;
   return (
     <div className="my-10">
       <div className="flex flex-col gap-2">
@@ -62,7 +56,7 @@ async function SavedRecipes({
         <Search />
       </div>
       <div className="flex flex-wrap justify-start gap-10 mx-10">
-        {recipes.map((recipe) => (
+        {filteredRecipes.map((recipe) => (
           <Link
             href={`/saved-recipes/${recipe.name
               .toLowerCase()
