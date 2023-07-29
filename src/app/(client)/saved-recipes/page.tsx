@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Search from "./search";
 
 type Recipe = {
   id: string;
@@ -12,30 +13,54 @@ type Recipe = {
   imageURL: string;
 };
 
-async function getSavedRecipes() {
+async function getSavedRecipes(search: string | undefined) {
   const server = process.env.SERVER;
-  const res = await fetch(`${server}/api/recipe`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-    cache: "no-cache",
-  });
-  if (!res.ok) {
-    throw new Error("Failed to fetch recipes");
+  if (search === undefined) {
+    const res = await fetch(`${server}/api/recipe`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      cache: "no-cache",
+    });
+    if (!res.ok) {
+      throw new Error("Failed to fetch recipes");
+    }
+    const data = await res.json();
+    return data.recipes;
+  } else {
+    const res = await fetch(`${server}/api/recipe/search/${search}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!res.ok) {
+      throw new Error("Failed to fetch recipes");
+    }
+    const data = await res.json();
+    return data.recipes;
   }
-  const data = await res.json();
-  return data.recipes;
 }
-async function SavedRecipes() {
-  const recipes = (await getSavedRecipes()) as Recipe[];
+async function SavedRecipes({
+  searchParams,
+}: {
+  searchParams: {
+    [key: string]: string | string[] | undefined;
+  };
+}) {
+  const search =
+    typeof searchParams.search === "string" ? searchParams.search : undefined;
+
+  const recipes = (await getSavedRecipes(search)) as Recipe[];
 
   return (
     <div className="my-10">
-      <h1
-        className="mb-10 flex justify-center text-4xl font-bold 
+      <div className="flex flex-col gap-2">
+        <h1
+          className="flex justify-center text-4xl font-bold 
       text-gray-900"
-      >
-        Saved Recipes
-      </h1>
+        >
+          Saved Recipes
+        </h1>
+        <Search />
+      </div>
       <div className="flex flex-wrap justify-start gap-10 mx-10">
         {recipes.map((recipe) => (
           <Link

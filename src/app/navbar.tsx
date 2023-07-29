@@ -36,9 +36,7 @@ export default async function Navbar() {
             )}
           </li>
           <li>
-            {!session ? (
-              <Link href="/signup">Sign Up</Link>
-            ) : (
+            {session && (
               <Image
                 src={user?.image as string}
                 alt={user?.name as string}
