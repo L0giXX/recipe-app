@@ -9,14 +9,29 @@ interface FileUploadProps {
   endpoint: "recipeImage";
 }
 
-export default function FileUpload({ onChange, value, endpoint }: FileUploadProps) {
+export default function FileUpload({
+  onChange,
+  value,
+  endpoint,
+}: FileUploadProps) {
   const fileType = value?.split(".").pop();
-  if (fileType === "jpg" || fileType === "png" || fileType === "jpeg" || fileType === "webp") {
+  if (
+    fileType === "jpg" ||
+    fileType === "png" ||
+    fileType === "jpeg" ||
+    fileType === "webp"
+  ) {
     return (
       <div className="mb-4">
         <span className="font-bold text-gray-900">Uploaded Image</span>
-        <div className="relative w-[200px] group">
-          <Image src={value} alt="upload" className="rounded-sm" height={200} width={200} />
+        <div className="group relative w-[200px]">
+          <Image
+            src={value}
+            alt="upload"
+            className="rounded-sm"
+            height={200}
+            width={200}
+          />
           <DeleteButton
             onClick={() => onChange("")}
             className="absolute opacity-0 group-hover:opacity-100"

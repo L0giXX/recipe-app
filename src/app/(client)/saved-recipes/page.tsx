@@ -34,12 +34,15 @@ async function SavedRecipes({
     [key: string]: string | string[] | undefined;
   };
 }) {
-  const search = typeof searchParams.search === "string" ? searchParams.search : undefined;
+  const search =
+    typeof searchParams.search === "string" ? searchParams.search : undefined;
 
   const recipes = (await getSavedRecipes()) as Recipe[];
   // Filter recipes by search
   const filteredRecipes = search
-    ? recipes.filter((recipe) => recipe.name.toLowerCase().includes(search.toLowerCase()))
+    ? recipes.filter((recipe) =>
+        recipe.name.toLowerCase().includes(search.toLowerCase())
+      )
     : recipes;
   return (
     <div className="my-10">
@@ -52,14 +55,15 @@ async function SavedRecipes({
         </h1>
         <Search />
       </div>
-      <div className="flex flex-wrap gap-12 w-full justify-center">
+      <div className="flex w-full flex-wrap justify-center gap-12">
         {filteredRecipes.map((recipe) => (
           <Link
-            href={`/saved-recipes/${recipe.name.toLowerCase().replace(/\s+/g, "").trim()}/${
-              recipe.id
-            }`}
+            href={`/saved-recipes/${recipe.name
+              .toLowerCase()
+              .replace(/\s+/g, "")
+              .trim()}/${recipe.id}`}
             key={recipe.id}
-            className="flex flex-col overflow-hidden rounded-lg border shadow w-[300px]"
+            className="flex w-[300px] flex-col overflow-hidden rounded-lg border shadow"
           >
             <Image
               width={300}

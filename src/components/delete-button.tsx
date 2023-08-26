@@ -6,11 +6,14 @@ interface DeleteButtonProps extends ComponentProps<"button"> {
   className?: string;
 }
 
-export default function DeleteButton({ className, ...props }: DeleteButtonProps) {
+export default function DeleteButton({
+  className,
+  ...props
+}: DeleteButtonProps) {
   return (
     <button
       className={twMerge(
-        "bg-rose-500 text-white p-1 rounded-full shadow-sm top-0 right-0",
+        "right-0 top-0 rounded-full bg-rose-500 p-1 text-white shadow-sm",
         className
       )}
       type="button"

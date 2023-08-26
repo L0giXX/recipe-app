@@ -14,7 +14,7 @@ export default async function Home() {
   const session = await getServerSession(options);
   const user = session?.user as User;
   return (
-    <main className="flex flex-wrap text-6xl font-bold text-gray-900 justify-center mt-64 mb-64 mx-5">
+    <main className="mx-5 mb-64 mt-64 flex flex-wrap justify-center text-6xl font-bold text-gray-900">
       <div className="">
         {session ? (
           <div className="">

@@ -14,7 +14,7 @@ export default function Search() {
   }, [debounced, router]);
 
   return (
-    <div className="flex justify-center mb-2">
+    <div className="mb-2 flex justify-center">
       <input
         type="text"
         placeholder="Search for Recipe"

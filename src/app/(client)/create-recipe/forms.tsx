@@ -78,7 +78,10 @@ export default function Forms() {
           />
         </div>
         <div>
-          <label className="mb-2 block font-bold text-gray-900" htmlFor="description">
+          <label
+            className="mb-2 block font-bold text-gray-900"
+            htmlFor="description"
+          >
             Description
           </label>
           <textarea
@@ -91,13 +94,16 @@ export default function Forms() {
           ></textarea>
         </div>
         <div className="mb-4">
-          <label className="mb-2 block font-bold text-gray-900" htmlFor="ingredients">
+          <label
+            className="mb-2 block font-bold text-gray-900"
+            htmlFor="ingredients"
+          >
             Ingredients
           </label>
           {recipe.ingredients.map((ingredient, index) => (
             <input
               key={index}
-              className="focus:shadow-outline mb-2 flex w-full flex-col rounded border  px-3 py-2 text-gray-900 shadow focus:outline-none"
+              className="focus:shadow-outline mb-2 flex w-full flex-col rounded border px-3 py-2 text-gray-900 shadow focus:outline-none"
               id="ingredients"
               name="ingredients"
               type="text"
@@ -116,7 +122,10 @@ export default function Forms() {
           </button>
         </div>
         <div className="mb-4">
-          <label className="mb-2 block font-bold text-gray-900" htmlFor="instructions">
+          <label
+            className="mb-2 block font-bold text-gray-900"
+            htmlFor="instructions"
+          >
             Instructions
           </label>
           {recipe.instructions.map((instruction, index) => (
@@ -141,7 +150,10 @@ export default function Forms() {
           </button>
         </div>
         <div className="mb-4">
-          <label className="mb-2 block font-bold text-gray-900" htmlFor="cookTime">
+          <label
+            className="mb-2 block font-bold text-gray-900"
+            htmlFor="cookTime"
+          >
             Cooking Time
           </label>
           <input

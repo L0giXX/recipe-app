@@ -30,9 +30,11 @@ async function SpecificRecipe({ params }: { params: { id: string } }) {
 
   return (
     <div className="my-5 flex justify-center">
-      <div className="flex w-[600px] flex-col justify-center gap-2 overflow-hidden border p-5 shadow group relative">
-        <div className="flex flex-row justify-between relative">
-          <h1 className="flex flex- text-4xl font-bold text-gray-900">{recipe.name}</h1>
+      <div className="group relative flex w-[600px] flex-col justify-center gap-2 overflow-hidden border p-5 shadow">
+        <div className="relative flex flex-row justify-between">
+          <h1 className="flex- flex text-4xl font-bold text-gray-900">
+            {recipe.name}
+          </h1>
           <Button id={params.id} />
         </div>
         <p className="break-words">{recipe.description}</p>
