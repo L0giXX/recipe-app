@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import FileUpload from "@/components/file-upload";
 
 export default function Forms() {
   const router = useRouter();
@@ -42,9 +43,8 @@ export default function Forms() {
 
   async function handleSubmit(e: any) {
     e.preventDefault();
-    const server = process.env.SERVER;
     try {
-      const res = await fetch(`${server}/api/recipe`, {
+      const res = await fetch(`/api/recipe`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(recipe),
@@ -78,10 +78,7 @@ export default function Forms() {
           />
         </div>
         <div>
-          <label
-            className="mb-2 block font-bold text-gray-900"
-            htmlFor="description"
-          >
+          <label className="mb-2 block font-bold text-gray-900" htmlFor="description">
             Description
           </label>
           <textarea
@@ -94,10 +91,7 @@ export default function Forms() {
           ></textarea>
         </div>
         <div className="mb-4">
-          <label
-            className="mb-2 block font-bold text-gray-900"
-            htmlFor="ingredients"
-          >
+          <label className="mb-2 block font-bold text-gray-900" htmlFor="ingredients">
             Ingredients
           </label>
           {recipe.ingredients.map((ingredient, index) => (
@@ -122,10 +116,7 @@ export default function Forms() {
           </button>
         </div>
         <div className="mb-4">
-          <label
-            className="mb-2 block font-bold text-gray-900"
-            htmlFor="instructions"
-          >
+          <label className="mb-2 block font-bold text-gray-900" htmlFor="instructions">
             Instructions
           </label>
           {recipe.instructions.map((instruction, index) => (
@@ -150,10 +141,7 @@ export default function Forms() {
           </button>
         </div>
         <div className="mb-4">
-          <label
-            className="mb-2 block font-bold text-gray-900"
-            htmlFor="cookTime"
-          >
+          <label className="mb-2 block font-bold text-gray-900" htmlFor="cookTime">
             Cooking Time
           </label>
           <input
@@ -166,20 +154,11 @@ export default function Forms() {
             required
           />
         </div>
-        <div className="mb-4">
-          <label className="mb-2 block font-bold text-gray-900" htmlFor="name">
-            Image URL
-          </label>
-          <input
-            className="focus:shadow-outline w-full rounded border px-3 py-2 text-gray-900  shadow focus:outline-none"
-            id="imageURL"
-            name="imageURL"
-            type="text"
-            placeholder="Enter Image URL ..."
-            onChange={handleChange}
-            required
-          />
-        </div>
+        <FileUpload
+          onChange={(url) => setRecipe({ ...recipe, imageURL: url as string })}
+          value={recipe.imageURL}
+          endpoint="recipeImage"
+        />
         <button
           className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-900 focus:outline-none"
           type="submit"

@@ -34,15 +34,12 @@ async function SavedRecipes({
     [key: string]: string | string[] | undefined;
   };
 }) {
-  const search =
-    typeof searchParams.search === "string" ? searchParams.search : undefined;
+  const search = typeof searchParams.search === "string" ? searchParams.search : undefined;
 
   const recipes = (await getSavedRecipes()) as Recipe[];
   // Filter recipes by search
   const filteredRecipes = search
-    ? recipes.filter((recipe) =>
-        recipe.name.toLowerCase().includes(search.toLowerCase())
-      )
+    ? recipes.filter((recipe) => recipe.name.toLowerCase().includes(search.toLowerCase()))
     : recipes;
   return (
     <div className="my-10">
@@ -55,15 +52,14 @@ async function SavedRecipes({
         </h1>
         <Search />
       </div>
-      <div className="flex flex-wrap justify-start gap-10 mx-10">
+      <div className="flex flex-wrap gap-12 w-full justify-center">
         {filteredRecipes.map((recipe) => (
           <Link
-            href={`/saved-recipes/${recipe.name
-              .toLowerCase()
-              .replace(/\s+/g, "")
-              .trim()}/${recipe.id}`}
+            href={`/saved-recipes/${recipe.name.toLowerCase().replace(/\s+/g, "").trim()}/${
+              recipe.id
+            }`}
             key={recipe.id}
-            className="mx-auto flex w-[300px] flex-col overflow-hidden rounded-lg border shadow"
+            className="flex flex-col overflow-hidden rounded-lg border shadow w-[300px]"
           >
             <Image
               width={300}
@@ -72,7 +68,7 @@ async function SavedRecipes({
               src={recipe.imageURL}
               alt={recipe.name}
             />
-            <div className="flex h-full flex-col p-5">
+            <div className="flex flex-col p-5">
               <h2 className="text-2xl font-semibold">{recipe.name}</h2>
               <p className="break-words">{recipe.description}</p>
               <div className="mt-auto">

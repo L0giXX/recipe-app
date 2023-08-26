@@ -2,13 +2,13 @@
 import React from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import DeleteButton from "@/components/delete-button";
 
 export default function Button(params: { id: string }) {
   const router = useRouter();
 
   async function deleteRecipe() {
-    const server = process.env.SERVER;
-    const res = await fetch(`${server}/api/recipe/${params.id}`, {
+    const res = await fetch(`/api/recipe/${params.id}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
     });
@@ -23,12 +23,9 @@ export default function Button(params: { id: string }) {
     router.push("/saved-recipes");
   }
   return (
-    <button
-      className="hidden group-hover:block w-10 h-10 border rounded-full items-center shrink-0 grow-0 bg-red-500 text-white font-bold justify-center"
-      type="button"
+    <DeleteButton
       onClick={deleteRecipe}
-    >
-      X
-    </button>
+      className="absolute top-2 opacity-0 group-hover:opacity-100"
+    />
   );
 }

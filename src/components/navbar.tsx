@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { options } from "./api/auth/[...nextauth]/options";
+import { options } from "../app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 
