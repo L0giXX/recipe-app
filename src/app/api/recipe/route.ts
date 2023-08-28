@@ -1,9 +1,23 @@
 import { NextResponse } from "next/server";
-import { prisma } from "../../../utils/prisma";
+import { prisma } from "@/utils/prisma";
+import { recipeSchema } from "@/lib/types";
 
 export async function POST(request: Request) {
   const origin = request.headers.get("origin");
   const body = await request.json();
+  const result = recipeSchema.safeParse(body);
+  if (!result.success) {
+    return NextResponse.json(
+      { error: result.error },
+      {
+        status: 400,
+        headers: {
+          "Access-Control-Allow-Origin": origin || "*",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+  }
   const { name, description, ingredients, instructions, cookTime, imageURL } =
     body;
   const recipe = await prisma.recipe.create({

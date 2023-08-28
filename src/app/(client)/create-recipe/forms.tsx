@@ -2,80 +2,84 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import FileUpload from "@/components/file-upload";
+import { TRecipe, recipeSchema } from "@/lib/types";
+import { useForm, useFieldArray } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function Forms() {
-  const router = useRouter();
-  const [recipe, setRecipe] = useState({
-    name: "",
-    description: "",
-    ingredients: [] as string[],
-    instructions: [] as string[],
-    cookTime: 0,
-    imageURL: "",
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    control,
+  } = useForm<TRecipe>({
+    resolver: zodResolver(recipeSchema),
   });
 
-  function handleChange(e: any) {
-    const { name, value } = e.target;
-    setRecipe({ ...recipe, [name]: value });
-  }
-
-  function handleChangeIngredients(e: any, index: number) {
-    const { value } = e.target;
-    const ingredients = recipe.ingredients;
-    ingredients[index] = value;
-    setRecipe({ ...recipe, ingredients });
-  }
-
-  function handleChangeInstructions(e: any, index: number) {
-    const { value } = e.target;
-    const instructions = recipe.instructions;
-    instructions[index] = value;
-    setRecipe({ ...recipe, instructions });
-  }
-
-  function addIngredient() {
-    setRecipe({ ...recipe, ingredients: [...recipe.ingredients, ""] });
-  }
-
-  function addInstruction() {
-    setRecipe({ ...recipe, instructions: [...recipe.instructions, ""] });
-  }
-
-  async function handleSubmit(e: any) {
-    e.preventDefault();
-    try {
-      const res = await fetch(`/api/recipe`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(recipe),
-      });
-      if (!res.ok) {
-        const data = await res.json();
-        alert(`Unable to create recipe, reason: ${data.error}`);
-        return;
-      }
-      router.push("/");
-    } catch (err: any) {
-      alert(`Unable to create recipe, reason: ${err.message}`);
+  const { fields: ingredientsFields, append: appendIngredient } = useFieldArray(
+    {
+      control,
+      name: "ingredients",
     }
-  }
+  );
+
+  const { fields: instructionsFields, append: appendInstruction } =
+    useFieldArray({
+      control,
+      name: "instructions",
+    });
+
+  const onSubmit = async (data: TRecipe) => {
+    data.imageURL = imageURL;
+    console.log(data);
+  };
+
+  const [imageURL, setImageURL] = useState("");
+
+  // async function handleSubmit1(e: any) {
+  //   e.preventDefault();
+  //   try {
+  //     const validRecipe = recipeSchema.safeParse(recipe);
+  //     if (!validRecipe.success) {
+  //       alert(`Unable to create recipe, reason: ${validRecipe.error.message}`);
+  //       return;
+  //     }
+  //     const res = await fetch(`/api/recipe`, {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(recipe),
+  //     });
+  //     if (!res.ok) {
+  //       const data = await res.json();
+  //       alert(`Unable to create recipe, reason: ${data.error}`);
+  //       return;
+  //     }
+  //     router.push("/");
+  //   } catch (err: any) {
+  //     alert(`Unable to create recipe, reason: ${err.message}`);
+  //   }
+  // }
   return (
     <div className="mt-10 flex flex-col items-center">
       <h1 className="mb-4 text-4xl font-bold text-gray-900">Create Recipe</h1>
-      <form className="mb-4 rounded bg-white px-8 pb-8 pt-6 shadow-md">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="mb-4 rounded bg-white px-8 pb-8 pt-6 shadow-md"
+      >
         <div className="mb-4">
           <label className="mb-2 block font-bold text-gray-900" htmlFor="name">
             Recipe name
           </label>
           <input
+            {...register("name")}
             className="focus:shadow-outline w-full rounded border px-3 py-2 text-gray-900  shadow focus:outline-none"
             id="name"
-            name="name"
             type="text"
             placeholder="Enter Recipe Name ..."
-            onChange={handleChange}
-            required
           />
+          {errors.name && (
+            <p className="text-red-500">{`${errors.name.message}`}</p>
+          )}
         </div>
         <div>
           <label
@@ -85,13 +89,14 @@ export default function Forms() {
             Description
           </label>
           <textarea
+            {...register("description")}
             className="focus:shadow-outline mb-4 w-full rounded border px-3 py-2  text-gray-900 shadow focus:outline-none"
             placeholder="Enter Description ..."
             id="description"
-            name="description"
-            onChange={handleChange}
-            required
           ></textarea>
+          {errors.description && (
+            <p className="text-red-500">{`${errors.description.message}`}</p>
+          )}
         </div>
         <div className="mb-4">
           <label
@@ -100,21 +105,21 @@ export default function Forms() {
           >
             Ingredients
           </label>
-          {recipe.ingredients.map((ingredient, index) => (
+          {ingredientsFields.map((field, index) => (
             <input
-              key={index}
+              key={field.id}
+              {...register(`ingredients.${index}.value`)}
               className="focus:shadow-outline mb-2 flex w-full flex-col rounded border px-3 py-2 text-gray-900 shadow focus:outline-none"
-              id="ingredients"
-              name="ingredients"
               type="text"
-              value={ingredient}
+              id="ingredients"
               placeholder="Enter Ingredient ..."
-              onChange={(e) => handleChangeIngredients(e, index)}
-              required
             />
           ))}
+          {errors.ingredients && (
+            <p className="text-red-500">{`${errors.ingredients.message}`}</p>
+          )}
           <button
-            onClick={addIngredient}
+            onClick={() => appendIngredient({ value: "" })}
             type="button"
             className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-900 focus:outline-none"
           >
@@ -128,21 +133,21 @@ export default function Forms() {
           >
             Instructions
           </label>
-          {recipe.instructions.map((instruction, index) => (
+          {instructionsFields.map((field, index) => (
             <input
-              key={index}
-              className="focus:shadow-outline mb-2 flex w-full flex-col rounded border  px-3 py-2 text-gray-900 shadow focus:outline-none"
-              id="instructions"
-              name="instructions"
+              key={field.id}
+              {...register(`instructions.${index}.value`)}
+              className="focus:shadow-outline mb-2 flex w-full flex-col rounded border px-3 py-2 text-gray-900 shadow focus:outline-none"
               type="text"
-              value={instruction}
+              id="instructions"
               placeholder="Enter Instruction ..."
-              onChange={(e) => handleChangeInstructions(e, index)}
-              required
             />
           ))}
+          {errors.instructions && (
+            <p className="text-red-500">{`${errors.instructions.message}`}</p>
+          )}
           <button
-            onClick={addInstruction}
+            onClick={() => appendInstruction({ value: "" })}
             type="button"
             className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-900 focus:outline-none"
           >
@@ -157,24 +162,24 @@ export default function Forms() {
             Cooking Time
           </label>
           <input
+            {...register("cookTime")}
             className="focus:shadow-outline w-full rounded border px-3 py-2 text-gray-900  shadow focus:outline-none"
             id="cookTime"
-            name="cookTime"
-            type="number"
             placeholder="Enter Cooking Time in minutes ..."
-            onChange={handleChange}
-            required
           />
+          {errors.cookTime && (
+            <p className="text-red-500">{`${errors.cookTime.message}`}</p>
+          )}
         </div>
         <FileUpload
-          onChange={(url) => setRecipe({ ...recipe, imageURL: url as string })}
-          value={recipe.imageURL}
+          onChange={(url) => setImageURL(url as string)}
+          value={imageURL}
           endpoint="recipeImage"
         />
         <button
           className="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-900 focus:outline-none"
           type="submit"
-          onClick={handleSubmit}
+          disabled={isSubmitting}
         >
           Submit
         </button>

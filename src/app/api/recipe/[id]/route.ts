@@ -27,7 +27,7 @@ export async function DELETE(
 ) {
   const { id } = params;
   const origin = request.headers.get("origin");
-  const recipe = await prisma.recipe.delete({
+  await prisma.recipe.delete({
     where: { id: id },
   });
   return NextResponse.json(
