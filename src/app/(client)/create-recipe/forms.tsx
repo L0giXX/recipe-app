@@ -1,17 +1,19 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import FileUpload from "@/components/file-upload";
 import { TRecipe, recipeSchema } from "@/lib/types";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function Forms() {
+  const [imageURL, setImageURL] = useState("");
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     control,
+    reset,
   } = useForm<TRecipe>({
     resolver: zodResolver(recipeSchema),
   });
@@ -31,34 +33,20 @@ export default function Forms() {
 
   const onSubmit = async (data: TRecipe) => {
     data.imageURL = imageURL;
-    console.log(data);
+    const res = await fetch(`/api/recipe`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const data = await res.json();
+      alert(`Unable to create recipe, reason: ${data.error}`);
+      return;
+    }
+    reset();
+    setImageURL("");
   };
 
-  const [imageURL, setImageURL] = useState("");
-
-  // async function handleSubmit1(e: any) {
-  //   e.preventDefault();
-  //   try {
-  //     const validRecipe = recipeSchema.safeParse(recipe);
-  //     if (!validRecipe.success) {
-  //       alert(`Unable to create recipe, reason: ${validRecipe.error.message}`);
-  //       return;
-  //     }
-  //     const res = await fetch(`/api/recipe`, {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(recipe),
-  //     });
-  //     if (!res.ok) {
-  //       const data = await res.json();
-  //       alert(`Unable to create recipe, reason: ${data.error}`);
-  //       return;
-  //     }
-  //     router.push("/");
-  //   } catch (err: any) {
-  //     alert(`Unable to create recipe, reason: ${err.message}`);
-  //   }
-  // }
   return (
     <div className="mt-10 flex flex-col items-center">
       <h1 className="mb-4 text-4xl font-bold text-gray-900">Create Recipe</h1>

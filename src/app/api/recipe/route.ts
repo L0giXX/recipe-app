@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/utils/prisma";
-import { recipeSchema } from "@/lib/types";
+import { recipeSchema, TRecipe } from "@/lib/types";
 
 export async function POST(request: Request) {
   const origin = request.headers.get("origin");
-  const body = await request.json();
+  const body: TRecipe = await request.json();
   const result = recipeSchema.safeParse(body);
   if (!result.success) {
     return NextResponse.json(
@@ -24,8 +24,8 @@ export async function POST(request: Request) {
     data: {
       name,
       description,
-      ingredients,
-      instructions,
+      ingredients: ingredients.map((ingredient) => ingredient.value),
+      instructions: instructions.map((instruction) => instruction.value),
       cookTime,
       imageURL,
     },

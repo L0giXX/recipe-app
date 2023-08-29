@@ -14,7 +14,7 @@ model Recipe {
     ingredients  String[]
     instructions String[]
     cookTime     String
-    imageURL     String
+    imageURL     String?
 }
 
 model Account {
