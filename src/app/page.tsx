@@ -1,16 +1,35 @@
 import Link from "next/link";
+import Image from "next/image";
 import { CardContent, Card } from "@/components/ui/card";
+import { prisma } from "@/utils/prisma";
 
-export default function Component() {
+type Recipe = {
+  id: string;
+  name: string;
+  description: string;
+  ingredients: string[];
+  instructions: string[];
+  cookTime: string;
+  imageURL: string;
+};
+
+async function getSavedRecipes() {
+  try {
+    const recipes = await prisma.recipe.findMany({
+      take: 3,
+    });
+    return recipes;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export default async function Component() {
+  const recipes = (await getSavedRecipes()) as Recipe[];
   return (
     <div className="flex min-h-screen flex-col bg-white dark:bg-gray-900">
       <main className="flex-1">
-        <section
-          className="w-full bg-cover bg-center py-12 md:py-24 lg:py-32 xl:py-48"
-          style={{
-            backgroundImage: "url('/placeholder.svg')",
-          }}
-        >
+        <section className="w-full bg-cover bg-center py-12 md:py-24 lg:py-32 xl:py-48">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center space-y-4 text-center">
               <div className="space-y-2">
@@ -30,42 +49,27 @@ export default function Component() {
               Featured Recipes
             </h2>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              <Card>
-                <img
-                  alt="Recipe Image"
-                  className="aspect-content mx-auto overflow-hidden rounded-t-xl object-cover object-center sm:w-full"
-                  height="200"
-                  src="/placeholder.svg"
-                  width="200"
-                />
-                <CardContent className="flex flex-col items-center justify-center space-y-2">
-                  <h3 className="text-lg font-bold">Recipe Name</h3>
-                </CardContent>
-              </Card>
-              <Card>
-                <img
-                  alt="Recipe Image"
-                  className="aspect-content mx-auto overflow-hidden rounded-t-xl object-cover object-center sm:w-full"
-                  height="200"
-                  src="/placeholder.svg"
-                  width="200"
-                />
-                <CardContent className="flex flex-col items-center justify-center space-y-2">
-                  <h3 className="text-lg font-bold">Recipe Name</h3>
-                </CardContent>
-              </Card>
-              <Card>
-                <img
-                  alt="Recipe Image"
-                  className="aspect-content mx-auto overflow-hidden rounded-t-xl object-cover object-center sm:w-full"
-                  height="200"
-                  src="/placeholder.svg"
-                  width="200"
-                />
-                <CardContent className="flex flex-col items-center justify-center space-y-2">
-                  <h3 className="text-lg font-bold">Recipe Name</h3>
-                </CardContent>
-              </Card>
+              {recipes.map((recipe) => (
+                <Card key={recipe.id}>
+                  <Link
+                    href={`/saved-recipes/${recipe.name
+                      .toLowerCase()
+                      .replace(/\s+/g, "")
+                      .trim()}/${recipe.id}`}
+                  >
+                    <Image
+                      alt="Recipe Image"
+                      className="aspect-content mx-auto overflow-hidden rounded-t-xl object-cover object-center sm:w-full"
+                      height={500}
+                      src={recipe.imageURL}
+                      width={500}
+                    />
+                    <CardContent className="flex flex-col items-center justify-center space-y-2">
+                      <h3 className="text-lg font-bold">{recipe.name}</h3>
+                    </CardContent>
+                  </Link>
+                </Card>
+              ))}
             </div>
           </div>
         </section>
@@ -126,29 +130,6 @@ function InstagramIcon(props: React.SVGProps<SVGSVGElement>) {
       <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
       <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
       <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-    </svg>
-  );
-}
-
-function PocketKnifeIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M3 2v1c0 1 2 1 2 2S3 6 3 7s2 1 2 2-2 1-2 2 2 1 2 2" />
-      <path d="M18 6h.01" />
-      <path d="M6 18h.01" />
-      <path d="M20.83 8.83a4 4 0 0 0-5.66-5.66l-12 12a4 4 0 1 0 5.66 5.66Z" />
-      <path d="M18 11.66V22a4 4 0 0 0 4-4V6" />
     </svg>
   );
 }
